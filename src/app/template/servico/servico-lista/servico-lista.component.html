@@ -1,0 +1,114 @@
+<div class="container-fluid p-3">
+
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="m-0">Serviços</h1>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-12 col-md-10">
+            <div class="mb-2 mb-md-0">
+                <input type="search" id="searchText" name="searchText" class="form-control" placeholder="Nome ou CPF do cliente" [(ngModel)]="searchText">
+            </div>
+        </div>
+
+        <div class="col-12 col-md-2">
+            <div class="text-right">
+                <a routerLink="/servicos/cadastro" class="btn btn-success w-100" title="Cadastrar Serviço">
+                    <i class="fas fa-plus"></i>&nbsp;Adicionar
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" *ngIf="success">
+        <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Serviço excluído com sucesso!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="error">
+        <div class="row" *ngFor="let error of errors">
+            <div class="col">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Erro!</strong> {{error.message}} 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <div class="col">
+            <div class="table-responsive overflow-auto">
+                <table class="table table-hover table-borderless">
+                    <thead>
+                        <tr class="bg-dark">
+                            <th scope="col" class="align-middle text-white text-center">#</th>
+                            <th scope="col" class="align-middle text-white text-left">Cliente</th>
+                            <th scope="col" class="align-middle text-white text-center">Data Cadastro</th>
+                            <th scope="col" class="align-middle text-white text-center">Situação</th>
+                            <th scope="col" class="align-middle text-white text-center">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let servico of servicos | servicosFilter: searchText; index as i">
+                            <td class="align-middle text-center">
+                                {{i+1}}
+                            </td>
+                            <td class="align-middle text-left">
+                                {{servico.cliente.nome}}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{servico.dataCadastro | date: 'dd/MM/yyyy'}}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{servico.situacaoPagamento | titlecase}}
+                            </td>
+                            <td class="align-middle text-right">
+                                <button class="btn btn-primary m-1" (click)="update(servico)" title="Editar dados do serviço">
+                                    <i class="fas fa-pen"></i>&nbsp;Editar
+                                </button>
+                                <button class="btn btn-danger m-1" (click)="setServicoSelected(servico)" title="Excluir serviço" data-toggle="modal" data-target="#modalDelete">
+                                    <i class="fas fa-trash"></i>&nbsp;Excluir
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="servicoSelected">
+        <!-- Modal -->
+        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark">
+                        <h5 class="modal-title text-white" id="exampleModalLabel">Confirmação</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Deseja excluir o serviço prestado ao cliente <strong>{{servicoSelected.cliente.nome}}</strong> 
+                        no dia <strong>{{servicoSelected.dataCadastro | date: 'dd/MM/yyyy'}}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="delete(servicoSelected)">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

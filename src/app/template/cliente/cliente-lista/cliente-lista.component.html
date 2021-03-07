@@ -1,0 +1,115 @@
+<div class="container-fluid p-3">
+
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="m-0">Clientes</h1>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-12 col-md-10">
+            <div class="mb-2 mb-md-0">
+                <input type="search" id="searchText" name="searchText" class="form-control" placeholder="Nome ou CPF do cliente" [(ngModel)]="searchText">
+            </div>
+        </div>
+
+        <div class="col-12 col-md-2">
+            <div class="text-right">
+                <a routerLink="/clientes/cadastro" class="btn btn-success w-100" title="Cadastrar Cliente">
+                    <i class="fas fa-plus"></i>&nbsp;Adicionar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="success">
+        <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Cliente excluído com sucesso!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="error">
+        <div class="row" *ngFor="let error of errors">
+            <div class="col">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Erro!</strong> {{error.message}} 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row my-2">
+        <div class="col">
+            <div class="table-responsive overflow-auto">
+                <table class="table table-hover table-borderless">
+                    <thead class="bg-dark">
+                        <tr>
+                            <th scope="col" class="align-middle text-white text-center">#</th>
+                            <th scope="col" class="align-middle text-white text-left">Nome</th>
+                            <th scope="col" class="align-middle text-white text-center">CPF</th>
+                            <th scope="col" class="align-middle text-white text-center">Telefone</th>
+                            <th scope="col" class="align-middle text-white text-center">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cliente of clientes | clientesFilter: searchText; index as i">
+                            <td class="align-middle text-center">
+                                {{i+1}}
+                            </td>
+                            <td class="align-middle text-left">
+                                {{cliente.nome}}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{cliente.cpf | mask: '000.000.000-00'}}
+                            </td>
+                            <td class="align-middle text-center">
+                                {{cliente.telefone.length == 10 ? (cliente.telefone | mask: '(00) 0000-0000') :
+                                (cliente.telefone | mask: '(00) 0 0000-0000')}}
+                            </td>
+                            <td class="align-middle text-right">
+                                <button class="btn btn-primary m-1" (click)="update(cliente)">
+                                    <i class="fas fa-pen"></i>&nbsp;Editar
+                                </button>
+                                <button class="btn btn-danger m-1" (click)="setClienteSelected(cliente)" data-toggle="modal" data-target="#modalDelete">
+                                    <i class="fas fa-trash"></i>&nbsp;Excluir
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="clienteSelected">
+        <!-- Modal -->
+        <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark">
+                        <h5 class="modal-title text-white" id="exampleModalLabel">Confirmação</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Deseja excluir o cliente <strong>{{clienteSelected.nome}}</strong>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="delete(clienteSelected)">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

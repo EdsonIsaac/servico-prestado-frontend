@@ -1,0 +1,167 @@
+<div class="container-fluid p-3">
+
+    <div class="row" *ngIf="servico.id">
+        <div class="col">
+            <h1 class="mb-4">Atualizar Dados do Serviço</h1>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="!servico.id">
+        <div class="col">
+            <h1 class="mb-4">Cadastrar Serviço</h1>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="success">
+        <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Serviço salvo com sucesso!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="error">
+        <div class="row" *ngFor="let error of errors">
+            <div class="col">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Erro!</strong> {{error.message}} 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <form #servicoForm="ngForm" (ngSubmit)="onSubmit()">
+                <div class="row mb-md-2">
+                    <div class="col-12 col-md-6">
+                        <div class="mb-2">
+                            <label for="cliente">Cliente</label>
+                            <div class="input-group">
+                                <input type="text" name="cliente" id="cliente" class="form-control" [value]="servico.cliente ? servico.cliente.nome : null" readonly>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSearchCliente">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-2">
+                        <div class="mb-2">
+                            <label for="dataCadastro">Data Cadastro</label>
+                            <input type="text" id="dataCadastro" name="dataCadastro" class="form-control" [ngModel]="servico.dataCadastro | date: 'dd/MM/yyyy'" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-2">
+                        <div class="mb-2">
+                            <label for="valorPagamento">Valor do Serviço</label>
+                            <input type="text" name="valorPagamento" id="valorPagamento" class="form-control"
+                                [(ngModel)]="servico.valorPagamento" mask="separator.2" [thousandSeparator]="'.'"
+                                [decimalMarker]="','" prefix="R$ " [dropSpecialCharacters]="true">
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-2">
+                        <div class="mb-2">
+                            <label for="situacaoPagamento">Pagamento</label>
+                            <select name="situacaoPagamento" id="situacaoPagamento" class="form-control" [(ngModel)]="servico.situacaoPagamento">
+                                <option value="ABERTO">Aberto</option>
+                                <option value="PAGO">Pago</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-md-2">
+                    <div class="col-12">
+                        <div class="mb-2">
+                            <label for="descricao">Descrição</label>
+                            <textarea name="descricao" id="descricao" class="form-control"
+                                [(ngModel)]="servico.descricao"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="col">
+                        <div class="text-right">
+                            <button type="button" class="btn btn-warning" onclick="javascript:history.back()">
+                                <i class="fas fa-arrow-left"></i>&nbsp;Voltar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="text-left">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i>&nbsp;Salvar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalSearchCliente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">Selecionar Cliente</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="row mb-md-2">
+                        <div class="col">
+                            <div class="mb-2">
+                                <input type="search" name="searchText" id="searchText" class="form-control" placeholder="Nome ou CPF do cliente" [(ngModel)]="searchText">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-md-2">
+                        <div class="col">
+                            <div class="mb-2">
+                                <div class="table-responsive overflow-auto">
+                                    <table class="table table-hover table-borderless">
+                                        <tbody>
+                                            <tr *ngFor="let cliente of clientes | clientesFilter: searchText">
+                                                <td class="align-middle text-left">
+                                                    {{cliente.nome}}
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    {{cliente.cpf | mask: '000.000.000-00'}}
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    {{cliente.telefone | mask: '(00) 0000-0000'}}</td>
+                                                <td class="align-middle text-center">
+                                                    <button type="button" class="btn btn-success" data-dismiss="modal" (click)="setCliente(cliente)">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

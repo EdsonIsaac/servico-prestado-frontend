@@ -1,0 +1,108 @@
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-5">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header">
+                                <h3 class="text-center font-weight-light" *ngIf="addUser">Cadastrar Usuário</h3>
+                                <h3 class="text-center font-weight-light" *ngIf="!addUser">Entrar</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Usuário" [(ngModel)]="usuario.usuario">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-key"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="password" id="senha" name="senha" class="form-control" placeholder="Senha" [(ngModel)]="usuario.senha">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row" *ngIf="success">
+                                        <div class="col">
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                Usuário cadastrado com sucesso!
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div *ngIf="error">
+                                        <div *ngFor="let error of errors">
+                                            <div class="row" >
+                                                <div class="col">
+                                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                        <strong>Erro!</strong> {{error.message}}
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row" *ngIf="addUser">
+                                        <div class="col">
+                                            <div class="text-right">
+                                                <button type="button" class="btn btn-warning" (click)="newUserCancel()">Voltar</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="text-left">
+                                                <input type="submit" class="btn btn-success" value="Cadastrar">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" *ngIf="!addUser">
+                                        <div class="col">
+                                            <div class="text-center">
+                                                <input type="submit" class="btn btn-primary" value="Entrar">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="card-footer" *ngIf="!addUser">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="text-center">
+                                            <p class="m-0">
+                                                Não possui uma conta? <a href="#" (click)="newUser($event)">Cadastre-se!</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

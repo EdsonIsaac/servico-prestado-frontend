@@ -1,0 +1,119 @@
+<div class="container-fluid p-3">
+
+    <div class="row" *ngIf="cliente.id">
+        <div class="col">
+            <h1 class="mb-4">Atualizar Dados do Cliente</h1>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="!cliente.id">
+        <div class="col">
+            <h1 class="mb-4">Cadastrar Cliente</h1>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="success">
+        <div class="col">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Cliente salvo com sucesso!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="error">
+        <div class="row" *ngFor="let error of errors">
+            <div class="col">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Erro!</strong> {{error.message}} 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <form #clienteForm="ngForm" (ngSubmit)="onSubmit()">
+                <div class="row mb-md-2">
+                    <div class="col-12 col-md-6">
+                        <div class="mb-2">
+                            <label for="nome">Nome</label>
+                            <input type="text" name="nome" id="nome" class="form-control" [(ngModel)]="cliente.nome">
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-3">
+                        <div class="mb-2">
+                            <label for="dataNascimento">Data Nascimento</label>
+                            <input type="date" name="dataNascimento" id="dataNascimento" class="form-control" [(ngModel)]="cliente.dataNascimento">
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <div class="mb-2">
+                            <label for="sexo">Sexo</label>
+                            <select name="sexo" id="sexo" class="form-control" [(ngModel)]="cliente.sexo">
+                                <option value="Feminino">Feminino</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-md-2">
+                    <div class="col-12 col-md-2">
+                        <div class="mb-2">
+                            <label for="cpf">CPF</label>
+                            <input type="text" name="cpf" id="cpf" class="form-control" [(ngModel)]="cliente.cpf" mask="CPF_CNPJ">
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-2">
+                        <div class="mb-2">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" name="telefone" id="telefone" class="form-control" [(ngModel)]="cliente.telefone" mask="(00) 0000-0000">
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-2">
+                        <div class="mb-2">
+                            <label for="dataCadastro">Data Cadastro</label>
+                            <input type="text" name="dataCadastro" id="dataCadastro" class="form-control" [ngModel]="cliente.dataCadastro | date: 'dd/MM/yyyy'" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="mb-2">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" class="form-control" [(ngModel)]="cliente.email">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-2"> 
+                    <div class="col">
+                        <div class="text-right">
+                            <button type="button" class="btn btn-warning" onclick="javascript:history.back()">
+                                <i class="fas fa-arrow-left"></i>&nbsp;Voltar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="text-left">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i>&nbsp;Salvar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
